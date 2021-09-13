@@ -5,20 +5,33 @@ pragma solidity >=0.6.0 <0.8.0;
 /// @notice 
 contract ExampleContract{
 
-    ///@notice Emits the block time
-    address public immutable owner;
 
-    ///@notice Emits the block time
-    ///@param block block number
-    event ReallyCoolEvent(uint256 indexed block);
-
-
-    constructor() public {
-        owner = msg.sender;
+    function matchNumbersWrapper(uint a, uint b, uint256[] calldata masks)public pure returns(uint256){
+        return matchNumbers(a, b, masks);
     }
 
-    ///@notice Emits the block time
-    function callMe() external {
-        emit ReallyCoolEvent(block.number);
+
+    function matchNumbers(uint a, uint b, uint256[] calldata masks) public pure returns (uint) {
+        uint256 numberOfMatches = 0;
+
+        uint256 cardinality = 3;
+
+        for (uint256 i = 0; i < masks.length; i++) {
+            uint256 mask = masks[i];
+            assembly {
+                if not( eq( and(a, mask), and(b, mask) ))  {
+                    
+                    mstore(0x0, sub(cardinality,numberOfMatches))
+                    return(0x0, 32)
+                }
+                numberOfMatches := add(numberOfMatches, 1)
+            }
+
+        }
+
+        return cardinality - numberOfMatches;
+
     }
+
+
 }

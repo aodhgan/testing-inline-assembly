@@ -18,14 +18,11 @@ describe('Test Set Name', () => {
     })
     describe("callMe()", ()=>{
         it('Test Name', async () => {
-            await expect(exampleContract.callMe()).to.emit(exampleContract, "ReallyCoolEvent")
-        })
-    })
-    describe("get Owner", () => {
-        it('Test Name', async () => {
             
-            expect(await exampleContract.owner()).to.equal(wallet1.address)
-            expect(await exampleContract.connect(wallet2).owner()).to.not.equal(wallet2.address)
+            const result = await exampleContract.matchNumbersWrapper(255, 252, [15, 240])
+            console.log(result)
+
         })
     })
+
 })
